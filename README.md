@@ -1,58 +1,44 @@
 
-This config.yaml file is used to configure various microservices in a distributed application. It includes essential settings such as service discovery, database connections, API configurations, and security settings. Proper configuration ensures that the application runs smoothly in development, staging, and production environments.
+This guide provides a step by step instructions for deploying a microservice aplication using a helm chart to  Linode Kubernetes cluster (LKE)
 
 ## What is a Microservice?
 
 A microservice is an independently deployable service that performs a specific business function. Unlike monolithic applications, microservices are loosely coupled, allowing for greater flexibility, scalability, and maintainability. They communicate with each other via APIs and can be deployed, scaled, and updated independently.
 
-## Some security and production best practices adopted 
+## Prerequisites
 
+### Before you begin, ensure you have the following installed and configured:
+1. Helm – The Kubernetes package manager.
+2. kubectl – The Kubernetes command-line tool.
+3. Linode Kubernetes Engine (LKE) Cluster – A running cluster with at least one node.
+4. Helm Chart – A pre-configured Helm chart for your application.
 
-### 1. Liveness Probe
+## step 1
 
-• Checks if the application is still running.
-• If the probe fails, Kubernetes restarts the container.
-• Helps recover from deadlocks or unresponsive applications.
+Set up a cluster on the Linode cloud manager with step-by-step guide through the following link : 
+https://techdocs.akamai.com/cloud-computing/docs/create-a-cluster
 
-### 2. Readiness Probe
+## step 2: Step 2: Connect to Your Linode Kubernetes Cluster
 
-• Determines if the service is ready to receive traffic.
-• If the probe fails, Kubernetes removes the pod from the load balancer.
-• Ensures that traffic is only routed to fully initialized services.
+- Download the cluster’s kubeconfig
 
+- Set the KUBECONFIG environment variable:
 
-## Some Security Best Practices: 
+*** chmod 400 *** for permission
+*** export KUBECONFIG=$(pwd)/kubeconfig.yaml ***
 
-1. Use Environment Variables for Secrets
-• Never hardcode secrets in config.yaml. Use environment variables or a secrets manager like HashiCorp Vault or AWS Secrets Manager.
+- Verify that you can connect to your cluster:
 
-2. Enable Authentication & Authorization
-• Use JWT, OAuth, or OpenID Connect for secure authentication.
-• Implement role-based access control (RBAC).
+        *** kubectl get nodes ***
 
-3. Restrict Network Access
-• Use ClusterIP for internal services and Ingress controllers for external access.
-• Avoid exposing services directly via NodePort.
+If your nodes appear, you have successfully connected.
 
-4. Enable TLS Encryption
-• Use TLS (HTTPS) for all communications.
-• Configure an Ingress controller with a valid TLS certificate.
+### step 3: Create helm charts and configure 
 
-5. Restrict External Exposure
-• Use firewalls and security groups to restrict access.
-• Implement API rate limiting and monitoring.
-
-## Why Not Use NodePort?
-• Security Risks: Exposing a service via NodePort makes it accessible from any external IP, increasing attack surface.
-• Scalability Issues: Ports are limited (30000–32767), making it unsuitable for large-scale applications.
-• Lack of Load Balancing: NodePort does not provide automatic load balancing across nodes.
-• Alternative: Use Ingress Controllers with LoadBalancer type services rather.
-
-### Production Best Practices
-
-1. Use ConfigMaps & Secrets
-• Store non-sensitive configurations in Kubernetes ConfigMaps.
-• Store secrets in Kubernetes Secrets or a dedicated secrets manager.
-
-2. Use Resource Limits
-• Define CPU & memory limits for microservices to prevent resource exhaustion.
+- creating helm chart: ***helm create "chart-name"***
+- Delete every file inside the template folder and reconfigure it with values and specifications according to your conatiner images/services.
+- running shell files: from the project folder run ***./'file-name'***
+- install hemlfile: ***brew install helmfile***
+- list files in hemlfile: ***hemlfile list***
+- run and deploy services to cluster: ***helmfile sync***
+- delete files from cluster: ***helmfile destroy***
