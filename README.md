@@ -24,12 +24,12 @@ https://techdocs.akamai.com/cloud-computing/docs/create-a-cluster
 
 - Set the KUBECONFIG environment variable:
 
-1: *** chmod 400 *** for permission
-2: *** export KUBECONFIG=$(pwd)/kubeconfig.yaml ***
+1: ***chmod 400*** for permission
+2: ***export KUBECONFIG=$(pwd)/kubeconfig.yaml***
 
 - Verify that you can connect to your cluster:
 
-        *** kubectl get nodes ***
+        ***kubectl get nodes***
 
 If your nodes appear, you have successfully connected.
 
