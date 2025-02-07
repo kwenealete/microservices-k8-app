@@ -35,7 +35,7 @@ If your nodes appear, you have successfully connected.
 
 ### step 3: Create helm charts and configure 
 
-- creating helm chart: ***helm create "chart-name"***
+- creating helm chart: 'helm create "chart-name"'
 - Delete every file inside the template folder and reconfigure it with values and specifications according to your conatiner images/services.
 - running shell files: from the project folder run ***./'file-name'***
 - install hemlfile: ***brew install helmfile***
