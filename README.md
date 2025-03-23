@@ -5,40 +5,102 @@ This guide provides a step by step instructions for deploying a microservice apl
 
 A microservice is an independently deployable service that performs a specific business function. Unlike monolithic applications, microservices are loosely coupled, allowing for greater flexibility, scalability, and maintainability. They communicate with each other via APIs and can be deployed, scaled, and updated independently.
 
-## Prerequisites
 
-### Before you begin, ensure you have the following installed and configured:
-1. Helm – The Kubernetes package manager.
-2. kubectl – The Kubernetes command-line tool.
-3. Linode Kubernetes Engine (LKE) Cluster – A running cluster with at least one node.
-4. Helm Chart – A pre-configured Helm chart for your application.
 
-## step 1
 
-Set up a cluster on the Linode cloud manager with step-by-step guide through the following link : 
-https://techdocs.akamai.com/cloud-computing/docs/create-a-cluster
 
-## step 2: Step 2: Connect to Your Linode Kubernetes Cluster
+1. Introduction
 
-- Download the cluster’s kubeconfig
+We will deploy a microservice application on a Linode server using Kubernetes, package the application using Helm, and deploy using Helmfile. Helmfile simplifies managing Helm releases, making deployments efficient and repeatable.
 
-- Set the KUBECONFIG environment variable:
+By the end, you will have:
+✅ A Kubernetes cluster running on a Linode server 
+✅ A Helm chart for deploying your microservice
+✅ A Helmfile configuration to automate deployments
 
-1: ***chmod 400*** for permission
-2: ***'export KUBECONFIG=$(pwd)/kubeconfig.yaml'***
+⸻
 
-- Verify that you can connect to your cluster:
+2. Prerequisites
 
-        ***kubectl get nodes***
+Ensure you have:
+- A Linode account: A cloud computing provider offering virtual servers.
+- Helm: A package manager for Kubernetes that simplifies deployments.
+- Helmfile: A tool for managing multiple Helm charts efficiently.
+- Docker: A platform to containerize applications for easy deployment.
+- Git: Version control system used for managing project repositories.
 
-If your nodes appear, you have successfully connected.
+On your local machine, you need:
+- kubectl The command-line tool to interact with Kubernetes clusters.
 
-### step 3: Create helm charts and configure 
+### Install kubectl
+macOS:
 
-- creating helm chart: 'helm create "chart-name"'
-- Delete every file inside the template folder and reconfigure it with values and specifications according to your conatiner images/services.
-- running shell files: from the project folder run ***./'file-name'***
-- install hemlfile: ***brew install helmfile***
-- list files in hemlfile: ***hemlfile list***
-- run and deploy services to cluster: ***helmfile sync***
-- delete files from cluster: ***helmfile destroy***
+Install via Homebrew:
+``` bash
+brew install kubernetes-cli
+```
+Linux:
+
+Download the latest kubectl release:
+
+``` bash
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+```
+
+Make the downloaded file executable:
+``` bash
+chmod +x ./kubectl
+```
+
+Move the command into your PATH:
+``` bash
+sudo mv ./kubectl /usr/local/bin/kubectl
+```
+
+3. Set Up Linode kubernetes engine (LKE) 
+
+https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-lke-linode-kubernetes-engine
+
+
+Once your LKE cluster is created :
+4. Go to Kubernetes > Your Cluster > Download Kubeconfig and safe the kubeconfig.yaml file on your computer
+
+5. Export the kubeconfig environment variable to use this file and connect to the cluster
+
+``` bash
+export KUBECONFIG=~/<config-file-location>/kubeconfig.yaml
+```
+
+View your cluster's nodes using kubectl.
+``` bash 
+kubectl get nodes
+```
+
+## Install Helm
+
+https://helm.sh/docs/intro/install/
+
+## Install helmfile
+``` bash
+brew install helmfile
+```
+
+## Deploy the microservice app 
+
+``` bash 
+helmfile sync
+```
+
+check releases 
+``` bash
+helmfile list
+```
+view app on the browser
+
+Go to your Linode account > NodeBalancers and copy the IP Address. Paste it on your browser and view the app.
+
+To destroy the deployment 
+``` bash
+helmfile destroy
+
+```
